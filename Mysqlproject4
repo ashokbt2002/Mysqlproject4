@@ -1,0 +1,73 @@
+--mysql--
+
+create database quiz;
+use quiz;
+create table questions(
+id int(11) auto_increment,
+question varchar (255) not null,
+option_1 varchar (255) not null,
+option_2 varchar (255) not null,
+option_3 varchar (255) not null,
+option_4 varchar (255) not null,
+answer int (11) not null,
+primary key (id)
+);
+INSERT INTO questions (question,option_1,option_2, option_3, option_4, answer) VALUES
+('What is the capital of United Kingdom?', 'Paris', 'London', 'Berlin', 'Madrid', 2),
+('Which planet is known as the Red Planet?', 'Venus', 'Jupiter', 'Mars', 'Saturn', 3),
+('Who painted the Mona Lisa?', 'Leonardo da Vinci', 'Pablo Picasso', 'Vincent van Gogh', 'Michelangelo', 1),
+('What is the largest ocean on Earth?', 'Atlantic Ocean', 'Arctic Ocean', 'Indian Ocean', 'Pacific Ocean', 4),
+('Whatcal symbol for Iron?','Au','Ag','Cu','Fe',4 );
+select * from questions
+
+
+--python connectivity--
+
+import mysql.connector
+
+mydb=mysql.connector.connect(
+    host="localhost",
+    user="root",
+    password="root",
+    database="quiz"
+)
+
+mycursor=mydb.cursor()
+def display_questions(mycursor):
+    query="select * from questions"
+    mycursor.execute(query)
+    questions = mycursor.fetchall()
+    for question in questions:
+        print("Question:", question[1])
+        print("Options:")
+        print("1.",question[2])
+        print("2.",question[3])
+        print("3.",question[4])
+        print("4.",question[5])
+        print()
+        
+
+def take_quiz(mycursor):
+    score=0
+    query="select * from questions"
+    mycursor.execute(query)
+    questions=mycursor.fetchall()
+
+    for question in questions:
+        print("Question:", question[1])
+        print("Options:")
+        print("1.",question[2])
+        print("2.",question[3])
+        print("3.",question[4])
+        print("4.",question[5])
+        user_answer=int(input())
+
+        if user_answer==question[6]:
+            score+=1
+    return score
+
+print("questions:")
+display_questions(mycursor)
+print("Answers:")
+user_score = take_quiz(mycursor)  
+print("Your final score is:",user_score)
